@@ -1,38 +1,39 @@
-using EFCore.Data;
+﻿using EFCore.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace EFCore.Controllers
 {
-    public class OgrenciController : Controller
+    public class BootcampController : Controller
     {
 
         private readonly DataContext _context;
 
-        public OgrenciController(DataContext context)
+        public BootcampController(DataContext context)
         {
             _context = context;
         }
 
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var ogrenciler = await _context.Ogrenciler.ToListAsync();
-            return View(ogrenciler);
+            var bootcamps = await _context.Bootcamps.ToListAsync();
+            return View(bootcamps);
         }
+
         public IActionResult Create()
         {
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Ogrenci model)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(Bootcamp model)
         {
-
-            _context.Ogrenciler.Add(model);
+            _context.Bootcamps.Add(model);
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
-
         [HttpGet]
         public async Task<IActionResult> Edit(int? id)
         {
@@ -40,31 +41,28 @@ namespace EFCore.Controllers
             {
                 return NotFound();
             }
-            var ogr = await _context
-                            .Ogrenciler
-                            .Include(o => o.BootcampKayitlari)
-                            .ThenInclude(o => o.Bootcamp)
-                            .FirstOrDefaultAsync(o => o.OgrenciId == id);
-            // var ogr = await _context.Ogrenciler.FirstOrDefaultAsync(o=>o.OgrenciId == id);
 
-            if (ogr == null)
+            var kurs = await _context.Bootcamps
+                                     .Include(k => k.BootcampKayitlari)
+                                     .ThenInclude(k => k.Ogrenci)
+                                     .FirstOrDefaultAsync(k => k.KursId == id);
+
+            if (kurs == null)
             {
                 return NotFound();
             }
-            return View(ogr);
+
+            return View(kurs);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-
-        public async Task<IActionResult> Edit(int? id, Ogrenci model)
+        public async Task<IActionResult> Edit(int? id, Bootcamp model)
         {
-
-            if (id != model.OgrenciId)
+            if (id != model.KursId)
             {
                 return NotFound();
             }
-
             if (ModelState.IsValid)
             {
                 try
@@ -74,7 +72,7 @@ namespace EFCore.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!_context.Ogrenciler.Any(o => o.OgrenciId == model.OgrenciId))
+                    if (!_context.Bootcamps.Any(o => o.KursId == model.KursId))
                     {
                         return NotFound();
                     }
@@ -83,8 +81,9 @@ namespace EFCore.Controllers
                         throw;
                     }
                 }
+                return RedirectToAction("Index");
             }
-            return RedirectToAction("Index");
+            return View(model);
         }
 
         [HttpGet]
@@ -94,28 +93,28 @@ namespace EFCore.Controllers
             {
                 return NotFound();
             }
-            var ogrenci = await _context.Ogrenciler.FindAsync(id);
 
-            if (ogrenci == null)
+            var bootcamp = await _context.Bootcamps.FindAsync(id);
+            if (bootcamp == null)
             {
                 return NotFound();
             }
-            return View(ogrenci);
+            return View(bootcamp);
         }
+
 
         [HttpPost]
         public async Task<IActionResult> Delete([FromForm] int id)
         {
-            var ogrenci = await _context.Ogrenciler.FindAsync(id);
-            if (ogrenci == null)
+            var kurs = await _context.Bootcamps.FindAsync(id);
+            if (kurs == null)
             {
                 return NotFound();
             }
-            _context.Ogrenciler.Remove(ogrenci);
+            _context.Bootcamps.Remove(kurs);
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
-
-
     }
 }
+

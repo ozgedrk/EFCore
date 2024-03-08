@@ -6,5 +6,7 @@ namespace EFCore.Data
         [Key]
         public int KursId {get;set;}
         public string? Baslik {get;set;}
+        public ICollection<BootcampKayit> BootcampKayitlari { get; set; } = new List<BootcampKayit>();
+
     }
 }

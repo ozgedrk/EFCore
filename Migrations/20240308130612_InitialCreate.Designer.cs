@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EFCore.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240304172737_InitialCreate")]
+    [Migration("20240308130612_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -40,6 +40,9 @@ namespace EFCore.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("BootcampKursId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<DateTime>("KayitTarihi")
                         .HasColumnType("TEXT");
 
@@ -50,6 +53,10 @@ namespace EFCore.Migrations
                         .HasColumnType("INTEGER");
 
                     b.HasKey("KayitId");
+
+                    b.HasIndex("BootcampKursId");
+
+                    b.HasIndex("OgrenciId");
 
                     b.ToTable("Kayitlar");
                 });
@@ -75,6 +82,35 @@ namespace EFCore.Migrations
                     b.HasKey("OgrenciId");
 
                     b.ToTable("Ogrenciler");
+                });
+
+            modelBuilder.Entity("EFCore.Data.BootcampKayit", b =>
+                {
+                    b.HasOne("EFCore.Data.Bootcamp", "Bootcamp")
+                        .WithMany("BootcampKayitlari")
+                        .HasForeignKey("BootcampKursId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EFCore.Data.Ogrenci", "Ogrenci")
+                        .WithMany("BootcampKayitlari")
+                        .HasForeignKey("OgrenciId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Bootcamp");
+
+                    b.Navigation("Ogrenci");
+                });
+
+            modelBuilder.Entity("EFCore.Data.Bootcamp", b =>
+                {
+                    b.Navigation("BootcampKayitlari");
+                });
+
+            modelBuilder.Entity("EFCore.Data.Ogrenci", b =>
+                {
+                    b.Navigation("BootcampKayitlari");
                 });
 #pragma warning restore 612, 618
         }
