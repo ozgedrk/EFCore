@@ -1,13 +1,20 @@
-@model Bootcamp
+@model BootcampViewModel
 
 <h2>Kurs Ekle</h2>
 <hr>
 <form asp-controller="Bootcamp" asp-action="Create" method="post">
+    <div asp-validation-summary="All"></div>
     <div class="mb-3">
-        <label asp-for="Baslik" class="form-label">Bootcamp Adý</label>
+        <label asp-for="Baslik" class="form-label">Baslik</label>
         <input asp-for="Baslik" class="form-control">
     </div>
+    <div class="mb-3">
+        <label asp-for="EgitmenId" class="form-label">Eðitmen</label>
+        <select asp-for="EgitmenId" asp-items="ViewBag.Egitmenler" class="form-select">
+            <option value="">Seçiniz</option>
+        </select>
+    </div>
 
-    <button type="submit" class="btn btn-primary">Kaydet</button>
+    <button type="submit" class="btn btn-secondary">Kaydet</button>
 
 </form>

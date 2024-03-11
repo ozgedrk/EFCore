@@ -1,25 +1,32 @@
-@model Bootcamp
+@model BootcampViewModel
 
-<h2>Bootcamp Güncelle</h2>
+<h2>Kurs Güncelle</h2>
 <hr>
 <div class="row">
     <div class="col-8">
-        <form asp-controller="Bootcamp" asp-action="edit" method="post">
+        <form asp-controller="Bootcamp" asp-action="Edit" method="post">
             <input type="hidden" asp-for="KursId">
             <div class="mb-3">
-                <label asp-for="Baslik" class="form-label">Bootcamp Adı</label>
+                <label asp-for="Baslik" class="form-label">Baslik</label>
                 <input asp-for="Baslik" class="form-control">
             </div>
+            <div class="mb-3">
+                <label asp-for="EgitmenId" class="form-label">Eğitmen</label>
+                <select asp-for="EgitmenId" asp-items="ViewBag.Egitmenler" class="form-select">
+                    <option value="">Seçiniz</option>
+                </select>
+            </div>
 
-            <button type="submit" class="btn btn-primary">Kaydet</button>
+
+            <button type="submit" class="btn btn-secondary">Kaydet</button>
+
         </form>
-
     </div>
     <div class="col-4">
-        <h4>Kayitli Ogrenciler</h4>
-        <hr />
+        <h4>Kayıtlı Öğrenciler</h4>
+        <hr>
         <ul>
-            @foreach (var item in Model.BootcampKayitlari)
+            @foreach (var item in @Model.Kayitlar)
             {
                 <li>@item.Ogrenci.AdSoyad</li>
             }

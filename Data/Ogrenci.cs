@@ -8,6 +8,7 @@ namespace EFCore.Data
         public int OgrenciId { get; set; }
         public string? OgrenciAd { get; set; }
         public string? OgrenciSoyad { get; set; }
+
         public string AdSoyad
         {
             get
@@ -17,6 +18,6 @@ namespace EFCore.Data
         }
         public string? Eposta { get; set; }
         public string? Telefon { get; set; }
-        public ICollection<BootcampKayit> BootcampKayitlari { get; set; } = new List<BootcampKayit>();
+        public ICollection<BootcampKayit> KursKayitlari { get; set; } = new List<BootcampKayit>();
     }
 }

@@ -1,14 +1,11 @@
 ﻿@model Ogrenci
 
 <p>
-    <b>@Model.OgrenciAd @Model.OgrenciSoyad </b> isimli ogrenciyi silmek istiyor musun ?
+    <b> @Model.OgrenciAd @Model.OgrenciSoyad</b> isimli öğrenciyi silmek istiyor musunuz?
 
-
-    <form action="Delete" method="post">
-        <input type="hidden" name="id" value="@Model.OgrenciId" />
-        @* <input type="hidden" asp-for="@Model.OgrenciId" /> *@
-        <button type="submit" class="btn btn-danger">Evet </button>
-        <a asp-action="Index" class="btn btn-primary">Hayir</a>
+    <form asp-action="Delete" method="post">
+        <input type="hidden" value="@Model.OgrenciId" name="id">
+        <button type="submit" class="btn btn-danger">Evet</button>
+        <a asp-action="Index" class="btn btn-primary">Hayır</a>
     </form>
 </p>
-

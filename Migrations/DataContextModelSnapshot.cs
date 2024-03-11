@@ -26,7 +26,12 @@ namespace EFCore.Migrations
                     b.Property<string>("Baslik")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("EgitmenId")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("KursId");
+
+                    b.HasIndex("EgitmenId");
 
                     b.ToTable("Bootcamps");
                 });
@@ -35,9 +40,6 @@ namespace EFCore.Migrations
                 {
                     b.Property<int>("KayitId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("BootcampKursId")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("KayitTarihi")
@@ -51,11 +53,37 @@ namespace EFCore.Migrations
 
                     b.HasKey("KayitId");
 
-                    b.HasIndex("BootcampKursId");
+                    b.HasIndex("KursId");
 
                     b.HasIndex("OgrenciId");
 
                     b.ToTable("Kayitlar");
+                });
+
+            modelBuilder.Entity("EFCore.Data.Egitmen", b =>
+                {
+                    b.Property<int>("OgretmenId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Ad")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("BaslamaTarihi")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Eposta")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Soyad")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Telefon")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("OgretmenId");
+
+                    b.ToTable("Egitmenler");
                 });
 
             modelBuilder.Entity("EFCore.Data.Ogrenci", b =>
@@ -81,33 +109,49 @@ namespace EFCore.Migrations
                     b.ToTable("Ogrenciler");
                 });
 
+            modelBuilder.Entity("EFCore.Data.Bootcamp", b =>
+                {
+                    b.HasOne("EFCore.Data.Egitmen", "Egitmen")
+                        .WithMany("Bootcamps")
+                        .HasForeignKey("EgitmenId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Egitmen");
+                });
+
             modelBuilder.Entity("EFCore.Data.BootcampKayit", b =>
                 {
-                    b.HasOne("EFCore.Data.Bootcamp", "Bootcamp")
-                        .WithMany("BootcampKayitlari")
-                        .HasForeignKey("BootcampKursId")
+                    b.HasOne("EFCore.Data.Bootcamp", "Kurs")
+                        .WithMany("KursKayitlari")
+                        .HasForeignKey("KursId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("EFCore.Data.Ogrenci", "Ogrenci")
-                        .WithMany("BootcampKayitlari")
+                        .WithMany("KursKayitlari")
                         .HasForeignKey("OgrenciId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Bootcamp");
+                    b.Navigation("Kurs");
 
                     b.Navigation("Ogrenci");
                 });
 
             modelBuilder.Entity("EFCore.Data.Bootcamp", b =>
                 {
-                    b.Navigation("BootcampKayitlari");
+                    b.Navigation("KursKayitlari");
+                });
+
+            modelBuilder.Entity("EFCore.Data.Egitmen", b =>
+                {
+                    b.Navigation("Bootcamps");
                 });
 
             modelBuilder.Entity("EFCore.Data.Ogrenci", b =>
                 {
-                    b.Navigation("BootcampKayitlari");
+                    b.Navigation("KursKayitlari");
                 });
 #pragma warning restore 612, 618
         }

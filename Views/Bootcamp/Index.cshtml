@@ -1,27 +1,30 @@
 ﻿@model IEnumerable<Bootcamp>
 
-<h2>Bootcamp Listesi</h2>
-<a href="/Bootcamp/Create" class="btn btn-primary">Bootcamp Ekle</a>
+<h2>Kurs Listesi</h2>
+<a href="/Bootcamp/Create" class="btn btn-primary">Kurs Ekle</a>
 <hr>
 <table class="table table-bordered">
     <thead>
         <tr>
-            <th style="width: 150px;">@Html.DisplayNameFor(m =>m.KursId)</th>
-            <th>@Html.DisplayNameFor(m =>m.Baslik)</th>
-            <th style="width: 150px;">Ayarlar</th>
+            <th style="width: 150px;">@Html.DisplayNameFor(m => m.KursId)</th>
+            <th>@Html.DisplayNameFor(m => m.Baslik)</th>
+            <th>@Html.DisplayNameFor(m => m.Egitmen.AdSoyad)</th>
+            <th style="width: 150px;"></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var bootcamp in Model)
+        @foreach (var item in Model)
         {
             <tr>
-                <td>@Html.DisplayFor(modelItem => bootcamp.KursId)</td>
-                <td>@Html.DisplayFor(modelItem => bootcamp.Baslik)</td>
+                <td>@Html.DisplayFor(modelItem => item.KursId)</td>
+                <td>@Html.DisplayFor(modelItem => item.Baslik)</td>
+                <td>@Html.DisplayFor(modelItem => item.Egitmen.AdSoyad)</td>
                 <td>
-                    <a asp-controller="Bootcamp" asp-action="Edit" asp-route-id="@bootcamp.KursId" class="btn btn-primary">Edit</a>
-                    <a asp-controller="Bootcamp" asp-action="Delete" asp-route-id="@bootcamp.KursId" class="btn btn-danger">Delete</a>
+                    <a asp-action="Edit" asp-route-id="@item.KursId" class="btn btn-sm btn-primary">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@item.KursId" class="btn btn-sm btn-danger">Delete</a>
                 </td>
             </tr>
         }
+
     </tbody>
 </table>

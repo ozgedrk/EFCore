@@ -12,16 +12,20 @@ namespace EFCore.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Bootcamps",
+                name: "Egitmenler",
                 columns: table => new
                 {
-                    KursId = table.Column<int>(type: "INTEGER", nullable: false)
+                    OgretmenId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Baslik = table.Column<string>(type: "TEXT", nullable: true)
+                    Ad = table.Column<string>(type: "TEXT", nullable: true),
+                    Soyad = table.Column<string>(type: "TEXT", nullable: true),
+                    Eposta = table.Column<string>(type: "TEXT", nullable: true),
+                    Telefon = table.Column<string>(type: "TEXT", nullable: true),
+                    BaslamaTarihi = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Bootcamps", x => x.KursId);
+                    table.PrimaryKey("PK_Egitmenler", x => x.OgretmenId);
                 });
 
             migrationBuilder.CreateTable(
@@ -41,6 +45,26 @@ namespace EFCore.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Bootcamps",
+                columns: table => new
+                {
+                    KursId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Baslik = table.Column<string>(type: "TEXT", nullable: true),
+                    EgitmenId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Bootcamps", x => x.KursId);
+                    table.ForeignKey(
+                        name: "FK_Bootcamps_Egitmenler_EgitmenId",
+                        column: x => x.EgitmenId,
+                        principalTable: "Egitmenler",
+                        principalColumn: "OgretmenId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Kayitlar",
                 columns: table => new
                 {
@@ -48,15 +72,14 @@ namespace EFCore.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     OgrenciId = table.Column<int>(type: "INTEGER", nullable: false),
                     KursId = table.Column<int>(type: "INTEGER", nullable: false),
-                    BootcampKursId = table.Column<int>(type: "INTEGER", nullable: false),
                     KayitTarihi = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Kayitlar", x => x.KayitId);
                     table.ForeignKey(
-                        name: "FK_Kayitlar_Bootcamps_BootcampKursId",
-                        column: x => x.BootcampKursId,
+                        name: "FK_Kayitlar_Bootcamps_KursId",
+                        column: x => x.KursId,
                         principalTable: "Bootcamps",
                         principalColumn: "KursId",
                         onDelete: ReferentialAction.Cascade);
@@ -69,9 +92,14 @@ namespace EFCore.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Kayitlar_BootcampKursId",
+                name: "IX_Bootcamps_EgitmenId",
+                table: "Bootcamps",
+                column: "EgitmenId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Kayitlar_KursId",
                 table: "Kayitlar",
-                column: "BootcampKursId");
+                column: "KursId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Kayitlar_OgrenciId",
@@ -90,6 +118,9 @@ namespace EFCore.Migrations
 
             migrationBuilder.DropTable(
                 name: "Ogrenciler");
+
+            migrationBuilder.DropTable(
+                name: "Egitmenler");
         }
     }
 }
